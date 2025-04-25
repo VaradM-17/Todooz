@@ -9,7 +9,6 @@ public class TmsBackendApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(TmsBackendApplication.class, args);
 		System.out.println("Application Started....");
-	
 	}
 
 }
