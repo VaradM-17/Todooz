@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -50,11 +51,17 @@ public class TodoController {
 		TodoDto updatedTodo = todoService.updateTodo(id, todoDto);
 		return ResponseEntity.ok(updatedTodo);
 	}
-	
+
 	@DeleteMapping("/deleteTodo/{id}")
-	public ResponseEntity<String> deleteTodo(@PathVariable("id") Long id){
+	public ResponseEntity<String> deleteTodo(@PathVariable("id") Long id) {
 		todoService.deleteTodo(id);
 		return ResponseEntity.ok("Todo deleted...");
+	}
+
+	@PatchMapping("/completeTodo/{id}")
+	public ResponseEntity<TodoDto> completeTodo(@PathVariable("id") Long id) {
+		TodoDto todoDto = todoService.completeTodo(id);
+		return ResponseEntity.ok(todoDto);
 	}
 
 }
