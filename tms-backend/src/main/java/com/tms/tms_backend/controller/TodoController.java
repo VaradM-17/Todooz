@@ -20,7 +20,7 @@ import com.tms.tms_backend.service.TodoService;
 
 import lombok.AllArgsConstructor;
 
-@CrossOrigin("*")
+@CrossOrigin("http://localhost:3000")
 @RequestMapping("/todos")
 @AllArgsConstructor
 @RestController
