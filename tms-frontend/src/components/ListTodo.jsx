@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { getAllTodos } from "../services/TodoService";
+import { getAllTodos, deleteTodo } from "../services/TodoService";
 import "../component style/ListTodo.scss";
-import { useNavigate ,useParams} from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const ListTodo = () => {
   // set variables
@@ -32,7 +32,20 @@ const ListTodo = () => {
   //update Todo
   function updateTodo(id) {
     console.log(id);
-    navigate(`/update-todo/${id}`)
+    navigate(`/update-todo/${id}`);
+  }
+
+  // delete Todo
+  function removeTodo(id) {
+    deleteTodo(id)
+      .then(() => {
+        alert("Task Deleted");
+        listTodos();
+      })
+      .catch((error) => {
+        console.error(error);
+        alert("Failed to Delete Task");
+      });
   }
 
   return (
@@ -47,7 +60,9 @@ const ListTodo = () => {
             <th scope="col">Task</th>
             <th scope="col">Description</th>
             <th scope="col">Status</th>
-            <th scope="col" colSpan={2}>Action</th>
+            <th scope="col" colSpan={2}>
+              Actions
+            </th>
           </tr>
         </thead>
         <tbody className="fs-5">
@@ -57,8 +72,22 @@ const ListTodo = () => {
               <td>{todo.title}</td>
               <td>{todo.description}</td>
               <td>{todo.completed ? "Completed" : "Incomplete"}</td>
-              <td><button className="btn btn-primary" onClick={()=>updateTodo(todo.id)}>Update</button></td>
-              <td><button className="btn btn-danger">Delete</button></td>
+              <td>
+                <button
+                  className="btn btn-primary"
+                  onClick={() => updateTodo(todo.id)}
+                >
+                  Update
+                </button>
+              </td>
+              <td>
+                <button
+                  className="btn btn-danger"
+                  onClick={() => removeTodo(todo.id)}
+                >
+                  Delete
+                </button>
+              </td>
             </tr>
           ))}
         </tbody>

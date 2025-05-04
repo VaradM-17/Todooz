@@ -11,3 +11,5 @@ export const updateTodo = (id, todo) => {
 };
 
 export const getTodo = (id) => axios.get(`${BASE_URL}/get-todo/${id}`);
+
+export const deleteTodo = (id) => axios.delete(`${BASE_URL}/delete-todo/${id}`);
