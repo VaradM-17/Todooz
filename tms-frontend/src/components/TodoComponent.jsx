@@ -155,7 +155,7 @@ const TodoComponent = () => {
         </select>
     </div>
 
-    <button type="submit" className="w-full px-6 py-3 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 focus:outline-none transition-all duration-200 flex items-center justify-center space-x-2">
+    <button type="submit" className="w-full px-6 py-3 bg-blue-600 text-white font-medium rounded hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 focus:outline-none transition-all duration-200 flex items-center justify-center space-x-2">
         <span>Add Task</span>
         <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
