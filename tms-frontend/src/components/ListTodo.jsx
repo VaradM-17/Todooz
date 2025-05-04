@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { getAllTodos } from "../services/TodoService";
 import "../component style/ListTodo.scss";
-import { useNavigate } from "react-router-dom";
+import { useNavigate ,useParams} from "react-router-dom";
 
 const ListTodo = () => {
   // set variables
@@ -29,8 +29,14 @@ const ListTodo = () => {
     navigate("/add-todo");
   }
 
+  //update Todo
+  function updateTodo(id) {
+    console.log(id);
+    navigate(`/update-todo/${id}`)
+  }
+
   return (
-    <div className="container mt-5">
+    <div className="container mt-5 bg-custom">
       <button className="btn btn-primary mb-3 btn-lg" onClick={addNewTodo}>
         Add Todo
       </button>
@@ -41,6 +47,7 @@ const ListTodo = () => {
             <th scope="col">Task</th>
             <th scope="col">Description</th>
             <th scope="col">Status</th>
+            <th scope="col" colSpan={2}>Action</th>
           </tr>
         </thead>
         <tbody className="fs-5">
@@ -49,7 +56,9 @@ const ListTodo = () => {
               <td>{todo.id}</td>
               <td>{todo.title}</td>
               <td>{todo.description}</td>
-              <td>{todo.complete ? "Complete" : "Incomplete"}</td>
+              <td>{todo.completed ? "Completed" : "Incomplete"}</td>
+              <td><button className="btn btn-primary" onClick={()=>updateTodo(todo.id)}>Update</button></td>
+              <td><button className="btn btn-danger">Delete</button></td>
             </tr>
           ))}
         </tbody>
