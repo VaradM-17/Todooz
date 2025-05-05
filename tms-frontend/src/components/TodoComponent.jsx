@@ -31,6 +31,24 @@ const TodoComponent = () => {
     e.preventDefault();
     const todo = { title, description, completed };
 
+     // Validation regex: only letters and spaces
+  const textOnlyRegex = /^[A-Za-z\s]+$/;
+
+  if (!title.trim() || !description.trim()) {
+    alert("All fields are required.");
+    return;
+  }
+
+  if (!textOnlyRegex.test(title)) {
+    alert("Title must contain only letters and spaces.");
+    return;
+  }
+
+  if (!textOnlyRegex.test(description)) {
+    alert("Description must contain only letters and spaces.");
+    return;
+  }
+
     if (id) {
       updateTodo(id, todo)
         .then((response) => {
