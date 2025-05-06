@@ -6,20 +6,17 @@ import TodoComponent from "./components/TodoComponent";
 
 function App() {
   return (
-    <>
+    <div className="min-h-screen 	bg-cool-gray-100">
       <BrowserRouter>
-      <Header></Header>
+        <Header />
         <Routes>
-          <Route path="/" element={<ListTodo></ListTodo>}></Route>
-          <Route path="/todos" element={<ListTodo></ListTodo>}></Route>
-
-          <Route path="/add-todo" element={<TodoComponent></TodoComponent>}></Route>
-
-          <Route path="/update-todo/:id" element={<TodoComponent></TodoComponent>}></Route>
-          
+          <Route path="/" element={<ListTodo />} />
+          <Route path="/todos" element={<ListTodo />} />
+          <Route path="/add-todo" element={<TodoComponent />} />
+          <Route path="/update-todo/:id" element={<TodoComponent />} />
         </Routes>
       </BrowserRouter>
-    </>
+    </div>
   );
 }
 

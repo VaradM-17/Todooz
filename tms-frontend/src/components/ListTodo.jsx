@@ -19,6 +19,7 @@ const ListTodo = () => {
   const [todos, setTodos] = useState([]);
   const navigate = useNavigate();
 
+  // listTodos
   useEffect(() => {
     listTodos();
   }, []);
@@ -33,14 +34,17 @@ const ListTodo = () => {
       });
   }
 
+  // navigate to add task form
   function addNewTodo() {
     navigate("/add-todo");
   }
 
+  // navigate to update task form
   function updateTodo(id) {
     navigate(`/update-todo/${id}`);
   }
 
+  // delete task
   function removeTodo(id) {
     deleteTodo(id)
       .then(() => {
@@ -53,6 +57,7 @@ const ListTodo = () => {
       });
   }
 
+  // mark as complete
   function markAsCompleted(id) {
     completed(id)
       .then(() => {
@@ -63,6 +68,7 @@ const ListTodo = () => {
       });
   }
 
+  // mark as incomplete
   function markAsInCompleted(id) {
     incomplete(id)
       .then(() => {
@@ -74,6 +80,12 @@ const ListTodo = () => {
   }
 
   return (
+    <div>
+      <div className="h-42 bg-gradient-to-r from-blue-300 to-purple-300 text-center h-24 flex items-center justify-center shadow-md">
+        <h2 className="text-gray-800 text-lg font-semibold italic">
+          The secret of getting ahead is getting started.
+        </h2>
+      </div>
     <div className="container mx-auto my-8 px-4 max-w-6xl">
       <button
         className="mb-3 px-6 py-3 bg-gradient-to-r from-blue-600 to-blue-700 text-white font-medium rounded hover:from-blue-700 hover:to-blue-800 shadow-md hover:shadow-lg transition-all duration-200 flex items-center gap-2"
@@ -181,6 +193,7 @@ const ListTodo = () => {
           </tbody>
         </table>
       </div>
+    </div>
     </div>
   );
 };

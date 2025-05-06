@@ -6,11 +6,9 @@ const TodoComponent = () => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [completed, setCompleted] = useState(false);
-
   const navigate = useNavigate();
   const { id } = useParams();
 
-  // Fetch todo by ID
   useEffect(() => {
     if (id) {
       getTodo(id)
@@ -18,93 +16,92 @@ const TodoComponent = () => {
           setTitle(response.data.title);
           setDescription(response.data.description);
           setCompleted(response.data.completed);
-          console.log(response.data);
         })
-        .catch((error) => {
-          console.error(error);
-        });
+        .catch((error) => console.error(error));
     }
   }, [id]);
 
-  // Save or Update Todo
+  const [errors, setErrors] = useState({ title: "", description: "" });
+
+  const validateForm = () => {
+    let isValid = true;
+    const errorsCopy = { title: "", description: "" };
+
+    if (!title.trim()) {
+      errorsCopy.title = "Title is required";
+      isValid = false;
+    }
+
+    if (!description.trim()) {
+      errorsCopy.description = "Description is required";
+      isValid = false;
+    }
+
+    setErrors(errorsCopy);
+    return isValid;
+  };
+
   function saveOrUpdateTodo(e) {
     e.preventDefault();
+    if (!validateForm()) return;
+
     const todo = { title, description, completed };
-
-     // Validation regex: only letters and spaces
-  const textOnlyRegex = /^[A-Za-z\s]+$/;
-
-  if (!title.trim() || !description.trim()) {
-    alert("All fields are required.");
-    return;
-  }
-
-  if (!textOnlyRegex.test(title)) {
-    alert("Title must contain only letters and spaces.");
-    return;
-  }
-
-  if (!textOnlyRegex.test(description)) {
-    alert("Description must contain only letters and spaces.");
-    return;
-  }
 
     if (id) {
       updateTodo(id, todo)
-        .then((response) => {
-          console.log(response.data);
+        .then(() => {
           alert("Task Updated");
           navigate("/todos");
         })
-        .catch((error) => {
-          console.error(error);
-          alert("Task Not Updated");
-        });
+        .catch(() => alert("Task Not Updated"));
     } else {
       saveTodo(todo)
         .then(() => {
           alert("Task Added");
           navigate("/todos");
         })
-        .catch((error) => {
-          console.error(error);
-          alert("Task Not Added");
-        });
+        .catch(() => alert("Task Not Added"));
     }
   }
 
   function pageTitle() {
     return (
-      <h4 className="card-title text-center text-black mb-4 text-bold fs-2 text-secondary">
+      <h4 className="text-center text-black mb-4 text-2xl font-semibold text-secondary">
         {id ? "Update Task" : "Add New Task"}
       </h4>
     );
   }
 
   return (
-    <div>
-      <form className="max-w-sm mx-auto p-8 gap-1 bg-white rounded-xl shadow-lg border border-gray-200 my-8">
+    <div className="min-h-screen flex items-center justify-center bg-cool-gray-100">
+      <form
+        onSubmit={saveOrUpdateTodo}
+        className="w-full max-w-md p-6 bg-white rounded-xl shadow-lg border border-gray-200"
+      >
         {pageTitle()}
 
-        {/* <!-- To-do Title --> */}
-        <div className="mb-5">
-          <label className="block mb-2 text-sm font-semibold text-gray-700">
-            To-do Title
+        {/* Task Field */}
+        <div className="mb-4">
+          <label className="block mb-1 text-base font-semibold text-gray-700">
+            Task Name
           </label>
           <input
             type="text"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
-            id="email"
-            className="w-full px-4 py-3 rounded-lg bg-gray-50 border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 text-gray-900"
+            className={`w-full px-4 py-2 rounded-lg bg-gray-50 border ${
+              errors.title ? "border-red-500" : "border-gray-300"
+            } focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 text-gray-900`}
             placeholder="Enter task"
-            required
           />
+          {errors.title && (
+            <p className="mt-1 text-sm text-red-500">{errors.title}</p>
+          )}
         </div>
 
-        {/* <!-- Description --> */}
-        <div className="mb-5">
-          <label className="block mb-2 text-sm font-semibold text-gray-700">
+        {/* Description Field */}
+        <div className="mb-4">
+          <label className="block mb-1 text-base font-semibold text-gray-700">
             Description
           </label>
           <textarea
@@ -112,38 +109,40 @@ const TodoComponent = () => {
             placeholder="Describe your task"
             value={description}
             onChange={(e) => setDescription(e.target.value)}
-            type="password"
-            id="password"
-            className="w-full px-4 py-3 rounded-lg bg-gray-50 border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 text-gray-900 resize-none"
-            required
+            className={`w-full px-4 py-2 rounded-lg bg-gray-50 border ${
+              errors.description ? "border-red-500" : "border-gray-300"
+            } focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 text-gray-900 resize-none`}
           />
+          {errors.description && (
+            <p className="mt-1 text-sm text-red-500">{errors.description}</p>
+          )}
         </div>
 
-        {/* <!-- Select-option --> */}
-        <div className="mb-5">
+        {/* Status Field */}
+        <div className="mb-4">
           <label
             htmlFor="todoStatus"
-            className="block mb-2 text-sm font-semibold text-gray-700"
+            className="block mb-1 text-base font-semibold text-gray-700"
           >
             Status
           </label>
           <select
             id="todoStatus"
-            className="w-full px-4 py-3 rounded-lg bg-gray-50 border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 text-gray-900"
+            className="w-full px-4 py-2 rounded-lg bg-gray-50 border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 text-gray-900"
             value={completed}
-            onChange={(e) => setCompleted(e.target.value)}
+            onChange={(e) => setCompleted(e.target.value === "true")}
           >
             <option value="false">Incomplete</option>
             <option value="true">Completed</option>
           </select>
         </div>
 
+        {/* Submit Button */}
         <button
           type="submit"
-          className="w-full px-6 py-3 bg-blue-600 text-white font-medium rounded hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 focus:outline-none transition-all duration-200 flex items-center justify-center space-x-2"
-          onClick={(e) => saveOrUpdateTodo(e)}
+          className="w-50 mx-auto px-4 py-2 bg-blue-600 text-white font-semibold rounded hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 transition-all duration-200 flex items-center justify-center space-x-2"
         >
-          <span> {id ? "Update Todo" : "Add Todo"}</span>
+          <span>{id ? "Update Todo" : "Add Todo"}</span>
           <svg
             xmlns="http://www.w3.org/2000/svg"
             className="h-5 w-5"
@@ -152,9 +151,9 @@ const TodoComponent = () => {
             stroke="currentColor"
           >
             <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="2"
               d="M12 4v16m8-8H4"
             />
           </svg>
