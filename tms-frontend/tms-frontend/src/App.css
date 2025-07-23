@@ -1,0 +1,17 @@
+@import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
+
+.nav-link:hover {
+  color:dodgerblue !important; 
+}
+
+@media (max-width: 768px) {
+  .my-4 {
+    margin-top: 1rem !important;
+    margin-bottom: 0rem !important;
+  }
+
+  .my-5 {
+    margin-top: 0rem !important;
+    margin-bottom: 1rem !important;
+}
+}
