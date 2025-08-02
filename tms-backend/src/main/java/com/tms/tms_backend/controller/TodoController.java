@@ -21,7 +21,7 @@ import com.tms.tms_backend.service.TodoService;
 import lombok.AllArgsConstructor;
 
 @CrossOrigin("http://localhost:3000")
-@RequestMapping("/todos")
+@RequestMapping("/api/todos")
 @AllArgsConstructor
 @RestController
 public class TodoController {
