@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -28,6 +29,7 @@ public class TodoController {
 
 	private TodoService todoService;
 
+	@PreAuthorize("hasRole('ADMIN')")
 	@PostMapping("/add-todo")
 	public ResponseEntity<TodoDto> addTodo(@RequestBody TodoDto todoDto) {
 		TodoDto savedTodo = todoService.addTodo(todoDto);
@@ -40,18 +42,20 @@ public class TodoController {
 		return new ResponseEntity<>(todoDto, HttpStatus.OK);
 	}
 
-	@GetMapping("/get-all-todos")
+	@GetMapping
 	public ResponseEntity<List<TodoDto>> getAllTodos() {
 		List<TodoDto> todos = todoService.getAllTodos();
 		return ResponseEntity.ok(todos);
 	}
 
+	@PreAuthorize("hasRole('ADMIN')")
 	@PutMapping("/update-todo/{id}")
 	public ResponseEntity<TodoDto> updateTodo(@PathVariable("id") Long id, @RequestBody TodoDto todoDto) {
 		TodoDto updatedTodo = todoService.updateTodo(id, todoDto);
 		return ResponseEntity.ok(updatedTodo);
 	}
 
+	@PreAuthorize("hasRole('ADMIN')")
 	@DeleteMapping("/delete-todo/{id}")
 	public ResponseEntity<String> deleteTodo(@PathVariable("id") Long id) {
 		todoService.deleteTodo(id);
