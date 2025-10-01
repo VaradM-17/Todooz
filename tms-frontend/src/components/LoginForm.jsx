@@ -1,50 +1,39 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { LOGIN_URL, storeToken } from "../services/AuthService";
+import {
+  LOGIN_URL,
+  saveLoggedInUser,
+  storeToken,
+} from "../services/AuthService";
 import { toast } from "react-toastify";
 
 const LoginForm = () => {
-  const [formData, setFormData] = useState({
-    usernameOrEmail: "",
-    password: "",
-  });
-
+  const [usernameOrEmail, setUsernameOrEmail] = useState("");
+  const [password, setPassword] = useState("");
   const navigate = useNavigate();
 
   async function handleLoginData(e) {
     e.preventDefault();
-    console.log("Login data submitted:", formData);
-    if (!formData.usernameOrEmail || !formData.password) {
+    if (!usernameOrEmail || !password) {
       alert("Please fill in all fields!");
       return;
     }
 
-    LOGIN_URL(formData.usernameOrEmail, formData.password)
-      .then((response) => {
-        console.log(response.data);
+    try {
+      const response = await LOGIN_URL(usernameOrEmail, password);
+      const token = response.data.accessToken; // store raw token
+      const role = response.data.role;
 
-        const token =
-          "Basic " +
-          window.btoa(formData.usernameOrEmail + ":" + formData.password);
-        storeToken(token);
+      storeToken(token);
+      saveLoggedInUser(usernameOrEmail, role);
 
-        // saveLoggedInUser(formData.usernameOrEmail);
-        toast.success("Login successful! Welcome back.");
-        navigate("/todos");
-      })
-      .catch((error) => {
-        if (error.response && error.response.data) {
-          const data = error.response.data;
-          if (data.message) {
-            alert(data.message);
-          } else {
-            const messages = Object.values(data).join("\n");
-            alert(messages);
-          }
-        } else {
-          alert("Something went wrong!");
-        }
-      });
+      toast.success("Login successful! Welcome back.");
+      navigate("/todos");
+      window.location.reload();
+    } catch (error) {
+      console.log(error);
+      toast.error("Login failed. Check your credentials.");
+    }
   }
 
   return (
@@ -61,10 +50,8 @@ const LoginForm = () => {
               id="usernameOrEmail"
               className="form-control"
               placeholder="Enter your username or email"
-              value={formData.usernameOrEmail}
-              onChange={(e) =>
-                setFormData({ ...formData, usernameOrEmail: e.target.value })
-              }
+              value={usernameOrEmail}
+              onChange={(e) => setUsernameOrEmail(e.target.value)}
             />
           </div>
         </div>
@@ -79,10 +66,8 @@ const LoginForm = () => {
               id="password"
               className="form-control"
               placeholder="Enter your password"
-              value={formData.password}
-              onChange={(e) =>
-                setFormData({ ...formData, password: e.target.value })
-              }
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
             />
           </div>
         </div>

@@ -1,26 +1,25 @@
 import axios from "axios";
 import { getToken } from "./AuthService";
 
-const baseUrl = "http://localhost:8080/api/todos";
+const TODO_BASE_URL = "http://localhost:8080/api/todos";
 
-// Add a request interceptor
 axios.interceptors.request.use(
-  function (config) {
-    config.headers["Authorization"] = getToken();
+  (config) => {
+    const token = getToken();
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
     return config;
   },
-  function (error) {
-    return Promise.reject(error);
-  }
+  (error) => Promise.reject(error)
 );
 
-export const fetchTodos = () => axios.get(baseUrl);
-export const createTodo = (todo) => axios.post(`${baseUrl}/add-todo`, todo);
-export const fetchTodoById = (id) => axios.get(`${baseUrl}/get-todo/${id}`);
-export const editTodo = (id, todo) =>
-  axios.put(`${baseUrl}/update-todo/${id}`, todo);
-export const deleteTodo = (id) => axios.delete(`${baseUrl}/delete-todo/${id}`);
+export const fetchTodos = () => axios.get(TODO_BASE_URL);
+export const createTodo = (todo) => axios.post(`${TODO_BASE_URL}/todo`, todo);
+export const fetchTodoById = (id) => axios.get(`${TODO_BASE_URL}/${id}`);
+export const editTodo = (id, todo) => axios.put(`${TODO_BASE_URL}/${id}`, todo);
+export const deleteTodo = (id) => axios.delete(`${TODO_BASE_URL}/${id}`);
 export const todoCompleted = (id) =>
-  axios.patch(`${baseUrl}/completed-todo/${id}`);
+  axios.patch(`${TODO_BASE_URL}/complete/${id}`);
 export const todoPending = (id) =>
-  axios.patch(`${baseUrl}/incomplete-todo/${id}`);
+  axios.patch(`${TODO_BASE_URL}/incomplete/${id}`);

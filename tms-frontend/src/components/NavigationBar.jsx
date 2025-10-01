@@ -1,9 +1,14 @@
 import React from "react";
-import { NavLink } from "react-router-dom";
-// import { isUserLoggedIn } from "../services/AuthService";
+import { NavLink, useNavigate } from "react-router-dom";
+import { isUserLoggedIn, logout } from "../services/AuthService";
 
 const NavigationBar = () => {
-  // const isAuth = isUserLoggedIn();
+  const isAuth = isUserLoggedIn();
+  const navigate = useNavigate();
+  function handleLogOut() {
+    logout();
+    navigate("/login");
+  }
 
   return (
     <nav className="navbar navbar-expand-lg navbar-light bg-light shadow-sm px-5 py-3">
@@ -23,29 +28,45 @@ const NavigationBar = () => {
       </button>
       <div className="collapse navbar-collapse" id="navbarNav">
         <ul className="navbar-nav ms-auto align-items-lg-center gap-3">
-          <li className="nav-item">
-            <NavLink className="nav-link fw-semibold text-dark" to="/">
-              Tasks
-            </NavLink>
-          </li>
+          {isAuth && (
+            <li className="nav-item">
+              <NavLink className="nav-link fw-semibold text-dark" to="/">
+                Tasks
+              </NavLink>
+            </li>
+          )}
 
-          <li className="nav-item">
-            <NavLink
-              className="btn btn-primary fw-semibold px-4 py-2 rounded-pill shadow-sm"
-              to="/register"
-            >
-              Register
-            </NavLink>
-          </li>
-
-          <li className="nav-item">
-            <NavLink
-              className="btn btn-primary fw-semibold px-4 py-2 rounded-pill shadow-sm"
-              to="/login"
-            >
-              Login
-            </NavLink>
-          </li>
+          {!isAuth && (
+            <li className="nav-item">
+              <NavLink
+                className="btn btn-primary fw-semibold px-4 py-2 rounded-pill shadow-sm"
+                to="/register"
+              >
+                Register
+              </NavLink>
+            </li>
+          )}
+          {!isAuth && (
+            <li className="nav-item">
+              <NavLink
+                className="btn btn-primary fw-semibold px-4 py-2 rounded-pill shadow-sm"
+                to="/login"
+              >
+                Login
+              </NavLink>
+            </li>
+          )}
+          {isAuth && (
+            <li className="nav-item">
+              <NavLink
+                className="btn btn-primary fw-semibold px-4 py-2 rounded-pill shadow-sm"
+                to="/login"
+                onClick={handleLogOut}
+              >
+                Log out
+              </NavLink>
+            </li>
+          )}
         </ul>
       </div>
     </nav>

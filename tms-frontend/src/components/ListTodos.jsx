@@ -7,10 +7,12 @@ import {
 } from "../services/TodosServices";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import { isAdminUser } from "../services/AuthService";
 
 const ListTodos = () => {
   const [todos, setTodos] = useState([]);
   const navigate = useNavigate();
+  const isAdmin = isAdminUser();
 
   // fetch todos on component mount
   useEffect(() => {
@@ -73,9 +75,12 @@ const ListTodos = () => {
   return (
     <div>
       <div className="container my-5">
-        <button className="btn btn-primary mb-3" onClick={addTodo}>
-          Add Task
-        </button>
+        {isAdmin && (
+          <button className="btn btn-primary mb-3" onClick={addTodo}>
+            Add Task
+          </button>
+        )}
+
         <table className="table table-bordered table-striped">
           <thead>
             <tr>
@@ -95,20 +100,24 @@ const ListTodos = () => {
                 <td>{todo.completed ? "Completed" : "Pending"}</td>
                 <td className="text-center">
                   {/* update */}
-                  <button
-                    className="btn btn-primary btn-sm me-2"
-                    onClick={() => updateTodo(todo.id)}
-                  >
-                    <i className="bi bi-pencil-square"></i>
-                  </button>
+                  {isAdmin && (
+                    <button
+                      className="btn btn-primary btn-sm me-2"
+                      onClick={() => updateTodo(todo.id)}
+                    >
+                      <i className="bi bi-pencil-square"></i>
+                    </button>
+                  )}
 
                   {/* delete */}
-                  <button
-                    className="btn btn-danger btn-sm me-2"
-                    onClick={() => removeTodo(todo.id)}
-                  >
-                    <i className="bi bi-trash"></i>
-                  </button>
+                  {isAdmin && (
+                    <button
+                      className="btn btn-danger btn-sm me-2"
+                      onClick={() => removeTodo(todo.id)}
+                    >
+                      <i className="bi bi-trash"></i>
+                    </button>
+                  )}
 
                   {/* toggle status */}
                   <button
@@ -117,7 +126,6 @@ const ListTodos = () => {
                     } btn-sm`}
                     onClick={() => toggleStatus(todo)}
                   >
-                    {/* {" "}//// */}
                     Mark
                     {todo.completed ? (
                       <i className="bi bi-x"></i>
